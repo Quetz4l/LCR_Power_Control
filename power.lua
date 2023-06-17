@@ -37,7 +37,7 @@ end
 MSCProxy = getLSC()
 --MSCProxy = component.get("910") -- MSC Address for manual
 loopdelay = 2           -- Refresh time, 2 is standard
-RedstoneEnabled = true -- Redstone I/O connected to system for Generator enabling / Value true or false, default: false
+RedstoneEnabled = false -- Redstone I/O connected to system for Generator enabling / Value true or false, default: false
 
 -- Generator Toggle values
 
@@ -47,7 +47,7 @@ genOFF = 95             -- Generator turns off
 ArrowOff = false        -- Turns off the arrow underneath the meters
 Red100Off = true       -- When power gets at 100%, screen turns DARKRED to inform void. Can be turned off by setting value to true
 
-ShowWifiMod = true
+ShowWifiMod = false
 ShowMainenenceStatus = true
 ShowPassiveLost = true
 ShowTime= true

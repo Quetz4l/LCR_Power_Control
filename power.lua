@@ -14,7 +14,7 @@
 -- Added Wifi capacity
 -- Auto detect LCR
 
-
+-- You can download this command "wget https://raw.githubusercontent.com/Quetz4l/LCR_Power_Control/main/power.lua power.lua"
 
 local component = require("component")
 local computer = require("computer")
@@ -645,7 +645,7 @@ if ShowTime then
 
 end
 
-if ShowMainenenceStatus or RedstoneEnabled then
+if ShowMainenenceStatus or RedstoneEnabled or ShowWifiMod then
    y_shift= y_shift+1
 end
 

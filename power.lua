@@ -12,6 +12,7 @@
 -- Changed Arrow on Display
 -- Added more settings
 -- Added Wifi capacity
+-- Auto detect LCR
 
 
 
@@ -262,7 +263,7 @@ local posX
 
 local pos_num = io> 0 and true or false
 local arrowIteration = pos_num and 1 or -1
-local color = pos_num and GREEN or RED
+local color = pos_num and 0x386a18 or 0xe51111
 gpu.setForeground(color)
 
 local function drawArrow(text, y_inc)
@@ -353,7 +354,6 @@ end
 
 function GetTime(secs)
 local parts = 4
-
 local units = {"years", "d", "hr", "min", "sec"}
 local result = {}
 for i, v in ipairs({31536000, 86400, 3600, 60}) do
@@ -615,23 +615,31 @@ if AVEUToggle == true then
 end
 
 if ShowTime then
-   local seconds
    local color
-   if ioratein > 0 then
-      seconds= (maxenergyinit- storedenergyinit ) / ioratein
-      color = GREEN
+   local text
+
+   if percentenergy < 99.99 then
+      local seconds
+      text =  GetTime(seconds)
+      if ioratein > 0 then
+         seconds= (maxenergyinit- storedenergyinit ) / ioratein
+         color = GREEN
+      else
+         seconds = (storedenergyinit ) / (iorateout*20)
+         color = RED
+      end
+      seconds = seconds / 20
    else
-      seconds = (storedenergyinit ) / (iorateout*20)
-      color = RED
+      color = GREEN
+      text = "is already full"
    end
-   seconds = seconds / 20
 
    y_shift= y_shift+1
    term.setCursor(30,visual_y_start + y_shift)
    term.write("Time:")
    gpu.setForeground(color)
    term.setCursor(x_data, visual_y_start + y_shift)
-   term.write(GetTime(seconds))
+   term.write(text)
    gpu.setForeground(fg_default)
    gpu.setBackground(BLACK)
 

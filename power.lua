@@ -620,7 +620,6 @@ if ShowTime then
 
    if percentenergy < 99.99 then
       local seconds
-      text =  GetTime(seconds)
       if ioratein > 0 then
          seconds= (maxenergyinit- storedenergyinit ) / ioratein
          color = GREEN
@@ -629,6 +628,7 @@ if ShowTime then
          color = RED
       end
       seconds = seconds / 20
+      text =  GetTime(seconds)
    else
       color = GREEN
       text = "is already full"

@@ -24,6 +24,21 @@ local MT = {}
 local TimeTable = {}
 
 
+function GetLSC()
+   for id, name in pairs(component.list()) do
+      if name == "gt_machine"  then
+         local lcr = component.proxy(id)
+         if lcr.getSensorInformation()[15] ~= nil and string.sub(lcr.getSensorInformation()[15],1,14) == "Total wireless" then
+            return id
+         end
+      end
+   end
+
+   exit("LSR not found, try set ID by manual")
+end
+
+
+
 -- Settings to be changed
 
 -- [ General ]
@@ -71,18 +86,6 @@ function exit_msg(msg)
 end
 
 
-function GetLSC()
-   for id, name in pairs(component.list()) do
-      if name == "gt_machine"  then
-         local lcr = component.get(id)
-         if lcr.getSensorInformation()[15] ~= nil and string.sub(lcr.getSensorInformation,1,14) == "Total wireless" then
-            return id
-         end
-      end
-   end
-
-   exit("LSR not found, try set ID by manual")
-end
 
 
 

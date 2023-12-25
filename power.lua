@@ -92,13 +92,13 @@ end
 -- Redstone setup
 if RedstoneEnabled == true then toggleRS.setWakeThreshold(1) end
 
-function redON(signal)
+function RedON(signal)
    if RedstoneEnabled == true then
       toggleRS.setOutput({signal,signal,signal,signal,signal,signal})
    end
 end
 
-function redOFF()
+function RedOFF()
    if RedstoneEnabled == true then
       toggleRS.setOutput({0,0,0,0,0,0})
    end
@@ -513,21 +513,21 @@ local fg_color_percent = percent_fg_color
 
 -- Power Toggle
 if RedstoneEnabled == true then
-   currentOutputRSTable = toggleRS.getOutput()
-   currentOutputRS = currentOutputRSTable[3]
+   local currentOutputRSTable = toggleRS.getOutput()
+   local currentOutputRS = currentOutputRSTable[3]
 
-   statusRS = currentOutputRS == 0 and  "OFF" or "ON"
+   StatusRS = currentOutputRS == 0 and  "OFF" or "ON"
 
    if percentenergy <= GenON then
-      redON(10 - percentenergy // 5 )
-      statusRS = "ON"
+      RedON(15)
+      StatusRS = "ON"
    end
    if percentenergy >= GenOFF then
-      redOFF()
-      statusRS = "OFF"
+      RedOFF()
+      StatusRS = "OFF"
    end
 else
-   statusRS = "RS Disabled"
+   StatusRS = "RS Disabled"
 end
 
 if Red100Off == false then
@@ -550,8 +550,8 @@ local y_shift = 2
 local x_data = 52
 
 
-term.setCursor(35, visual_y_start -2)    term.write("█▀█ █▀█ █░█░█ █▀▀ █▀█   █▀▀ █▀█ █▄░█ ▀█▀ █▀█ █▀█ █░░")
-term.setCursor(35, visual_y_start -1)    term.write("█▀▀ █▄█ ▀▄▀▄▀ ██▄ █▀▄   █▄▄ █▄█ █░▀█ ░█░ █▀▄ █▄█ █▄▄")
+term.setCursor(35, visual_y_start -2)    term.write("█▀█ █▀█ █ █ █ █▀▀ █▀█   █▀▀ █▀█ █▄ █ ▀█▀ █▀█ █▀█ █  ")
+term.setCursor(35, visual_y_start -1)    term.write("█▀▀ █▄█ ▀▄▀▄▀ ██▄ █▀▄   █▄▄ █▄█ █ ▀█  █  █▀▄ █▄█ █▄▄")
 
 
 -- Draw current energy stored
@@ -682,7 +682,7 @@ if RedstoneEnabled then
    term.write("Generators status:")
    gpu.setForeground(fg_default)
    term.setCursor(x_data, visual_y_start + y_shift)
-   term.write(statusRS)
+   term.write(StatusRS)
    gpu.setForeground(fg_default)
    gpu.setBackground(BLACK)
 end

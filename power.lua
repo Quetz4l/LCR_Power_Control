@@ -20,41 +20,35 @@ local component = require("component")
 local computer = require("computer")
 local term = require("term")
 local gpu = component.gpu
-local sides = require("sides")
 local MT = {}
 local TimeTable = {}
 
-function getLSC()
-   for id, name in pairs(component.list()) do
-      if name == "gt_machine"  then return id end
-   end
-
-   exit("LSR not found, try set id by manual")
-end
 
 -- Settings to be changed
 
--- General
-MSCProxy = getLSC()
---MSCProxy = component.get("910") -- MSC Address for manual
-loopdelay = 2           -- Refresh time, 2 is standard
+-- [ General ]
+MSCProxy = GetLSC()
+--MSCProxy = component.get("118") -- MSC Address by manual
+Loopdelay = 2           -- Refresh time, 2 is standard
 RedstoneEnabled = false -- Redstone I/O connected to system for Generator enabling / Value true or false, default: false
-
--- Generator Toggle values
-
-genON = 60              -- Generator turns on
-genOFF = 95             -- Generator turns off
 
 ArrowOff = false        -- Turns off the arrow underneath the meters
 Red100Off = true       -- When power gets at 100%, screen turns DARKRED to inform void. Can be turned off by setting value to true
 
-ShowWifiMod = false
+ShowWifiMod = true
 ShowMainenenceStatus = true
 ShowPassiveLost = true
 ShowTime= true
 
--- START OF CODE
+-- Generator Toggle values
+GenON = 60              -- Generator turns on
+GenOFF = 95             -- Generator turns off
+
+
+-- [ START OF CODE ]
 -- Setup components
+
+
 msc = component.proxy(MSCProxy)
 storage = msc
 if RedstoneEnabled == true then toggleRS = component.redstone end
@@ -70,12 +64,27 @@ io_max_rate = 600000
 io_increment = io_max_rate / 100
 
 -- Functions
-
 function exit_msg(msg)
    term.clear()
    print(msg)
    os.exit()
 end
+
+
+function GetLSC()
+   for id, name in pairs(component.list()) do
+      if name == "gt_machine"  then
+         local lcr = component.get(id)
+         if lcr.getSensorInformation()[15] ~= nil and string.sub(lcr.getSensorInformation,1,14) == "Total wireless" then
+            return id
+         end
+      end
+   end
+
+   exit("LSR not found, try set ID by manual")
+end
+
+
 
 -- Redstone setup
 if RedstoneEnabled == true then toggleRS.setWakeThreshold(1) end
@@ -475,7 +484,7 @@ local passiveLost = ShowPassiveLost and string.sub(sensorInformation[4],15) or "
 local WifiStorage
 
 if ShowWifiMod then
-   WifiStorage = string.sub(sensorInformation[13],23)
+   WifiStorage = string.sub(sensorInformation[15],23)
 end
 
 local percentenergy = storedenergyinit / maxenergyinit * 100
@@ -506,11 +515,11 @@ if RedstoneEnabled == true then
 
    statusRS = currentOutputRS == 0 and  "OFF" or "ON"
 
-   if percentenergy <= genON then
+   if percentenergy <= GenON then
       redON(10 - percentenergy // 5 )
       statusRS = "ON"
    end
-   if percentenergy >= genOFF then
+   if percentenergy >= GenOFF then
       redOFF()
       statusRS = "OFF"
    end
@@ -699,7 +708,7 @@ draw_arrow(iorate, 22) --default height= 22
 
 
 -- Sleep
-os.sleep(loopdelay)
+os.sleep(Loopdelay)
 
 end
 --@@ END OF LOOP CODE@@--

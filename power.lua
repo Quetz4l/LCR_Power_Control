@@ -51,6 +51,20 @@ GenOFF = 95 -- Generator turns off
 
 
 -- [ START OF CODE ]
+function GetLSC()
+   for id, name in pairs(component.list()) do
+      if name == "gt_machine" then
+         local lcr = component.proxy(id)
+         if lcr.getSensorInformation()[15] ~= nil and string.sub(lcr.getSensorInformation()[15], 1, 14) == "Total wireless" then
+            return id
+         end
+      end
+   end
+
+   term.clear()
+   exit("LSR not found, try set ID by manual")
+end
+
 if MSCProxy == nil then
    MSCProxy = GetLSC()
 end
@@ -77,21 +91,6 @@ local COLORS = {
    DARKRED = 0x880000,
 }
 
-
--- Functions
-function GetLSC()
-   for id, name in pairs(component.list()) do
-      if name == "gt_machine" then
-         local lcr = component.proxy(id)
-         if lcr.getSensorInformation()[15] ~= nil and string.sub(lcr.getSensorInformation()[15], 1, 14) == "Total wireless" then
-            return id
-         end
-      end
-   end
-
-   term.clear()
-   exit("LSR not found, try set ID by manual")
-end
 
 -- Redstone setup
 function Redstone()
